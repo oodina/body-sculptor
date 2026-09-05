@@ -145,6 +145,14 @@
   .service-card h3{ font-size:18px; }
   .service-card p{ font-size:14px; color:var(--ink-soft); }
   .service-meta{ margin-top:auto; padding-top:10px; font-size:12.5px; color:var(--accent); font-weight:600; }
+  .service-items{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; }
+  .service-items li{ font-size:13.5px; color:var(--ink-soft); padding-inline-start:16px; position:relative; }
+  .service-items li::before{ content:"•"; position:absolute; left:0; color:var(--accent-gold); }
+  .service-card.coming-soon{ border-style:dashed; opacity:.82; }
+  .soon-badge{
+    display:inline-block; font-family:var(--font-body); font-size:10.5px; font-weight:700; letter-spacing:.04em;
+    background:var(--accent-gold-soft); color:var(--accent-gold); padding:3px 9px; border-radius:999px; vertical-align:middle;
+  }
 
   /* ---------- Prices ---------- */
   .country-toggle{ display:flex; gap:10px; justify-content:center; margin-bottom:30px; flex-wrap:wrap; }
@@ -497,12 +505,21 @@
       aboutP1:"I've been a certified massage therapist for nearly 10 years. Anti-cellulite massage was my very first specialty, and it's still my favourite — it opened the door to everything that came after.",
       aboutP2:"Three years in, I invested in my own laser machine, and since then I keep training with leading specialists and upgrading the equipment. Helping people feel good in their bodies is simply what I love doing.",
       aboutStat1:"years in massage", aboutStat2:"countries — Russia & Egypt", aboutStat3:"certified specialist",
-      servicesEyebrow:"What I do", servicesTitle:"Services", servicesLead:"Every treatment is chosen and dosed individually — not by the clock, but by what your skin actually needs.",
-      svcLaserName:"Laser hair removal", svcLaserDesc:"Soprano Titanium — a hybrid diode laser with 3 wavelengths, safe for all skin types.", svcLaserMeta:"Course: 10–12 sessions, every 21–30 days",
-      svcMassageName:"Anti-cellulite massage", svcMassageDesc:"My original specialty — a hands-on technique built over almost a decade of practice.", svcMassageMeta:"Price on request",
-      svcFacialName:"Hollywood facial cleaning", svcFacialDesc:"A 6-step deep facial: mechanical + ultrasonic cleaning, HydraFacial, oxygen infusion, custom mask, LED therapy.", svcFacialMeta:"Duration ≈ 2 hours",
-      svcBiorevitName:"Biorevitalization", svcBiorevitDesc:"SKINTEX PROLIFT — high-molecular hyaluronic acid + DMAE for an instant lifting effect.", svcBiorevitMeta:"Course: 3–4 sessions, 7–10 days apart",
-      svcLiquidName:"Liquid laser", svcLiquidDesc:"A gentler, light-based skin treatment — a nice add-on alongside facial care.", svcLiquidMeta:"Price to be confirmed",
+      servicesEyebrow:"What we offer", servicesTitle:"Services", servicesLead:"A full range of body and beauty treatments — each one dosed individually, not by the clock.",
+      grpSculptingTitle:"Non-surgical body sculpting", grpSculptingLead:"The perfect silhouette — no surgeon required. Includes:",
+      itemAntiCell:"Anti-cellulite massage", itemHoney:"Honey massage", itemManualLipo:"Manual lipo-massage",
+      itemCavitation:"Cavitation", itemRfBody:"RF body lifting", itemMuscle:"Muscle stimulation",
+      itemVacuum:"Vacuum massage", itemRolling:"Body rolling",
+      grpLaserTitle:"Laser hair removal", grpLaserDesc:"Soprano Titanium — a hybrid diode laser with 3 wavelengths, safe for all skin types.",
+      grpLaserMeta:"Course of 12 sessions — for the best result, every month without skipping",
+      grpCosmetologyTitle:"Cosmetology",
+      itemBuccal:"Buccal facial massage", itemRfFace:"RF facial lifting", itemBiorevit:"Biorevitalization",
+      itemMeso:"Mesotherapy for face & hair", itemLiquidLaser:"Liquid laser", itemPeels:"All types of peels",
+      itemFacial6:"6-step Hollywood facial cleaning", grpCosmetologyMeta:"Facial cleaning duration ≈ 2 hours",
+      grpKidsTitle:"Children's massage", grpKidsDesc:"Gentle, professional massage for children.",
+      grpNailsTitle:"Nails & henna", itemManicure:"Manicure", itemPedicure:"Pedicure", itemHenna:"Henna art",
+      grpColoristTitle:"Colorist", grpColoristDesc:"Hair colouring — joining our team soon.", grpColoristMeta:"Starting in about a month",
+      soonBadge:"Coming soon",
       pricesEyebrow:"Investment", pricesTitle:"Prices", pricesLead:"Prices shown for the selected country. Anything marked \"price on request\" will be confirmed directly.",
       countryRuShort:"Russia", countryEgShort:"Egypt",
       priceFullBody:"Full body — no exceptions", priceFullBodyNote:"Face, underarms, arms, areolas, stomach, legs, back, deep bikini",
@@ -552,12 +569,21 @@
       aboutP1:"Я сертифицированный мастер массажа, в этой сфере почти 10 лет. Антицеллюлитный массаж был моей самой первой специализацией — и остаётся любимой до сих пор, именно он открыл мне путь ко всему остальному.",
       aboutP2:"Спустя 3 года я купила собственный лазерный аппарат, и с тех пор регулярно прохожу обучение у лучших специалистов и обновляю оборудование. Делать красивые фигуры — моё призвание и работа, которую я люблю.",
       aboutStat1:"лет в массаже", aboutStat2:"страны — Россия и Египет", aboutStat3:"сертифицированный мастер",
-      servicesEyebrow:"Чем занимаюсь", servicesTitle:"Услуги", servicesLead:"Каждая процедура подбирается индивидуально — не по времени, а по тому, что реально нужно коже.",
-      svcLaserName:"Лазерная эпиляция", svcLaserDesc:"Soprano Titanium — гибридный диодный лазер с тремя длинами волны, безопасен для всех типов кожи.", svcLaserMeta:"Курс: 10–12 процедур каждые 21–30 дней",
-      svcMassageName:"Антицеллюлитный массаж", svcMassageDesc:"Моя первая и любимая специализация — техника, отточенная почти за 10 лет практики.", svcMassageMeta:"Цена уточняется",
-      svcFacialName:"Голливудская чистка лица", svcFacialDesc:"6-этапная глубокая чистка: механическая + ультразвуковая чистка, вакуумный гидропилинг, кислородная кисть, маска по типу кожи, LED-терапия.", svcFacialMeta:"Длительность ≈ 2 часа",
-      svcBiorevitName:"Биоревитализация", svcBiorevitDesc:"SKINTEX PROLIFT — высокомолекулярная гиалуроновая кислота + ДМАЭ, мгновенный лифтинг-эффект.", svcBiorevitMeta:"Курс: 3–4 процедуры с интервалом 7–10 дней",
-      svcLiquidName:"Жидкий лазер", svcLiquidDesc:"Более мягкая световая процедура для кожи — приятное дополнение к уходу за лицом.", svcLiquidMeta:"Цена уточняется",
+      servicesEyebrow:"Чем занимаемся", servicesTitle:"Услуги", servicesLead:"Полный спектр процедур для тела и красоты — каждая подбирается индивидуально, не по времени.",
+      grpSculptingTitle:"Лепка тела без хирурга", grpSculptingLead:"Идеальная фигура без операций! В процедуру входят:",
+      itemAntiCell:"Антицеллюлитный массаж", itemHoney:"Медовый массаж", itemManualLipo:"Ручная липосакция",
+      itemCavitation:"Кавитация", itemRfBody:"RF-лифтинг тела", itemMuscle:"Прокачка мышц",
+      itemVacuum:"Вакуумный массаж", itemRolling:"Выкатка тела",
+      grpLaserTitle:"Лазерная эпиляция", grpLaserDesc:"Soprano Titanium — гибридный диодный лазер с тремя длинами волны, безопасен для всех типов кожи.",
+      grpLaserMeta:"Курс из 12 процедур — для максимального результата нужно посещать каждый месяц без пропусков",
+      grpCosmetologyTitle:"Косметология",
+      itemBuccal:"Букальный массаж лица", itemRfFace:"RF-лифтинг лица", itemBiorevit:"Биоревитализация",
+      itemMeso:"Мезотерапия лица и волос", itemLiquidLaser:"Жидкий лазер", itemPeels:"Все виды пилингов",
+      itemFacial6:"6-этапная чистка лица", grpCosmetologyMeta:"Длительность чистки лица ≈ 2 часа",
+      grpKidsTitle:"Детский массаж", grpKidsDesc:"Бережный профессиональный массаж для детей.",
+      grpNailsTitle:"Ногти и хна", itemManicure:"Маникюр", itemPedicure:"Педикюр", itemHenna:"Роспись хной",
+      grpColoristTitle:"Мастер-колорист", grpColoristDesc:"Окрашивание волос — скоро в нашей команде.", grpColoristMeta:"Старт через месяц",
+      soonBadge:"Скоро",
       pricesEyebrow:"Инвестиция в себя", pricesTitle:"Цены", pricesLead:"Цены показаны для выбранной страны. Всё с пометкой «цена уточняется» — подтверждается лично.",
       countryRuShort:"Россия", countryEgShort:"Египет",
       priceFullBody:"Всё тело без исключений", priceFullBodyNote:"Лицо, подмышки, руки, ареолы, живот, ноги, спина, глубокое бикини",
@@ -597,13 +623,23 @@
     }
   };
 
-  var SERVICES = [
-    { id:"laser", icon:"i-bolt", nameKey:"svcLaserName", descKey:"svcLaserDesc", metaKey:"svcLaserMeta" },
-    { id:"massage", icon:"i-heart", nameKey:"svcMassageName", descKey:"svcMassageDesc", metaKey:"svcMassageMeta" },
-    { id:"facial", icon:"i-sparkle", nameKey:"svcFacialName", descKey:"svcFacialDesc", metaKey:"svcFacialMeta" },
-    { id:"biorevit", icon:"i-droplet", nameKey:"svcBiorevitName", descKey:"svcBiorevitDesc", metaKey:"svcBiorevitMeta" },
-    { id:"liquid", icon:"i-glow", nameKey:"svcLiquidName", descKey:"svcLiquidDesc", metaKey:"svcLiquidMeta" }
+  // Each group renders as one card. `items` are the techniques/options
+  // bundled inside that service (bulleted); `descKey`/`metaKey` are
+  // free-text intro / course-and-duration notes where we have them.
+  var SERVICE_GROUPS = [
+    { id:"sculpting", icon:"i-bolt", nameKey:"grpSculptingTitle", leadKey:"grpSculptingLead",
+      items:["itemAntiCell","itemHoney","itemManualLipo","itemCavitation","itemRfBody","itemMuscle","itemVacuum","itemRolling"] },
+    { id:"laser", icon:"i-glow", nameKey:"grpLaserTitle", descKey:"grpLaserDesc", metaKey:"grpLaserMeta" },
+    { id:"cosmetology", icon:"i-sparkle", nameKey:"grpCosmetologyTitle",
+      items:["itemBuccal","itemRfFace","itemBiorevit","itemMeso","itemLiquidLaser","itemPeels","itemFacial6"],
+      metaKey:"grpCosmetologyMeta" },
+    { id:"kids", icon:"i-heart", nameKey:"grpKidsTitle", descKey:"grpKidsDesc" },
+    { id:"nails", icon:"i-sparkle", nameKey:"grpNailsTitle", items:["itemManicure","itemPedicure","itemHenna"] },
+    { id:"colorist", icon:"i-sun", nameKey:"grpColoristTitle", descKey:"grpColoristDesc", metaKey:"grpColoristMeta", comingSoon:true }
   ];
+  // What actually shows in the booking dropdown — one entry per
+  // bookable group, skipping the colorist (not active yet).
+  var BOOKABLE_SERVICES = SERVICE_GROUPS.filter(function(g){ return !g.comingSoon; });
 
   // Real prices we have so far are Russia-only (in RUB); Egypt pricing
   // and a few RU items are still pending — shown honestly as "price on
@@ -671,13 +707,15 @@
 
   function renderServices(){
     var html = "";
-    SERVICES.forEach(function(s){
-      html += '<div class="service-card">' +
-        '<div class="service-icon"><svg><use href="#'+s.icon+'"/></svg></div>' +
-        '<h3>'+t(s.nameKey)+'</h3>' +
-        '<p>'+t(s.descKey)+'</p>' +
-        '<div class="service-meta">'+t(s.metaKey)+'</div>' +
-        '</div>';
+    SERVICE_GROUPS.forEach(function(g){
+      html += '<div class="service-card'+(g.comingSoon ? ' coming-soon' : '')+'">' +
+        '<div class="service-icon"><svg><use href="#'+g.icon+'"/></svg></div>' +
+        '<h3>'+t(g.nameKey)+(g.comingSoon ? ' <span class="soon-badge">'+t("soonBadge")+'</span>' : '')+'</h3>';
+      if(g.leadKey) html += '<p>'+t(g.leadKey)+'</p>';
+      if(g.descKey) html += '<p>'+t(g.descKey)+'</p>';
+      if(g.items) html += '<ul class="service-items">' + g.items.map(function(k){ return '<li>'+t(k)+'</li>'; }).join('') + '</ul>';
+      if(g.metaKey) html += '<div class="service-meta">'+t(g.metaKey)+'</div>';
+      html += '</div>';
     });
     var wrap = document.getElementById("serviceGrid");
     wrap.innerHTML = html;
@@ -744,7 +782,7 @@
 
   function renderBookForm(){
     var select = document.getElementById("bookService");
-    select.innerHTML = SERVICES.map(function(s){ return '<option value="'+s.id+'">'+t(s.nameKey)+'</option>'; }).join("");
+    select.innerHTML = BOOKABLE_SERVICES.map(function(s){ return '<option value="'+s.id+'">'+t(s.nameKey)+'</option>'; }).join("");
   }
 
   function buildWhatsappMessage(){
