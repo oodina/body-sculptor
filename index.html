@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Body Sculptor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFF7F4;
+    --surface:#FFFFFF;
+    --surface-2:#FBE6E1;
+    --ink:#3A2422;
+    --ink-soft:#8A6B66;
+    --ink-heading:#2E1B19;
+    --line:rgba(58,36,34,.13);
+    --accent:#B85C6B;
+    --accent-soft:#B85C6B1c;
+    --accent-gold:#C9A46A;
+    --accent-gold-soft:#C9A46A22;
+    --primary-ink:#FFFFFF;
+    --shadow-sm:0 4px 16px -6px rgba(58,36,34,.16);
+    --shadow:0 10px 34px -8px rgba(58,36,34,.22);
+    --radius-lg:20px;
+    --radius-md:14px;
+    --radius-sm:9px;
+    --font-display:'Fraunces',serif;
+    --font-body:'Work Sans',sans-serif;
+    color-scheme:light;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-body);
+    line-height:1.55; font-size:16px; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  h1,h2,h3,h4{ font-family:var(--font-display); font-weight:600; margin:0; color:var(--ink-heading); }
+  p{ margin:0; }
+  a{ color:inherit; }
+  button{ font-family:inherit; }
+  img{ max-width:100%; display:block; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .container{ max-width:1120px; margin-inline:auto; padding-inline:24px; }
+  @media (max-width:640px){ .container{ padding-inline:18px; } }
+  [hidden]{ display:none !important; }
+
+  .eyebrow{ font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px; border-radius:999px;
+    padding:13px 26px; font-size:15px; font-weight:600; cursor:pointer; border:1px solid transparent;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease; white-space:nowrap;
+  }
+  .btn:active{ transform:translateY(1px); }
+  .btn-primary{ background:var(--accent); color:var(--primary-ink); box-shadow:var(--shadow-sm); }
+  .btn-primary:hover{ box-shadow:var(--shadow); }
+  .btn-ghost{ background:transparent; color:var(--ink); border-color:var(--line); }
+  .btn-ghost:hover{ background:var(--surface-2); }
+  .btn-block{ width:100%; }
+  .icon-btn svg{ width:20px; height:20px; }
+
+  /* ---------- Header ---------- */
+  .site-header{
+    position:sticky; top:0; z-index:40; background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+  }
+  .header-row{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding-block:14px; }
+  .brand{ display:flex; align-items:center; gap:9px; text-decoration:none; }
+  .brand svg{ width:26px; height:26px; color:var(--accent); }
+  .brand-name{ font-family:var(--font-display); font-weight:600; font-size:20px; color:var(--ink-heading); }
+  nav.main-nav{ display:flex; align-items:center; gap:24px; }
+  nav.main-nav a{ text-decoration:none; font-size:14px; font-weight:600; color:var(--ink-soft); }
+  nav.main-nav a:hover{ color:var(--ink); }
+  @media (max-width:900px){ nav.main-nav{ display:none; } }
+  .header-actions{ display:flex; align-items:center; gap:10px; }
+  .lang-switch{ display:flex; gap:2px; padding:3px; border-radius:999px; border:1px solid var(--line); background:var(--surface); }
+  .lang-switch button{
+    font-size:11.5px; font-weight:700; letter-spacing:.03em; padding:7px 11px; border-radius:999px; border:none;
+    background:transparent; cursor:pointer; color:var(--ink-soft);
+  }
+  .lang-switch button[aria-pressed="true"]{ background:var(--accent); color:var(--primary-ink); }
+
+  /* ---------- Hero ---------- */
+  .hero{ position:relative; padding-block:64px 56px; overflow:hidden; text-align:center; }
+  .hero-inner{ position:relative; z-index:2; max-width:680px; margin-inline:auto; }
+  .hero-badge{
+    display:inline-flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--line);
+    padding:7px 16px; border-radius:999px; font-size:12.5px; color:var(--ink-soft); margin-bottom:18px;
+  }
+  .hero-badge svg{ width:14px; height:14px; color:var(--accent); }
+  .hero h1{ font-size:clamp(32px,5.4vw,54px); line-height:1.08; margin-block:14px 16px; }
+  .hero-lead{ font-size:17px; color:var(--ink-soft); max-width:52ch; margin:0 auto 30px; }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+  .hero-glow{
+    position:absolute; inset:0; z-index:0; pointer-events:none;
+    background:radial-gradient(ellipse 60% 55% at 50% 15%, var(--accent-soft) 0%, transparent 70%);
+  }
+  .hero-ring{
+    position:absolute; border-radius:50%; border:1.5px solid var(--accent-gold-soft); pointer-events:none; z-index:0;
+  }
+  .hero-ring.r1{ width:340px; height:340px; top:-80px; left:-100px; }
+  .hero-ring.r2{ width:220px; height:220px; bottom:-60px; right:-60px; border-color:var(--accent-soft); }
+
+  /* ---------- Section shell ---------- */
+  section{ padding-block:60px; }
+  .section-head{ max-width:640px; margin-bottom:36px; }
+  .section-head.center{ margin-inline:auto; text-align:center; }
+  .section-head h2{ font-size:clamp(26px,3.4vw,36px); margin-top:8px; }
+  .section-head p{ color:var(--ink-soft); margin-top:12px; font-size:15.5px; }
+
+  .divider{ display:flex; align-items:center; justify-content:center; gap:16px; padding:4px 0; }
+  .divider::before, .divider::after{
+    content:""; flex:1; max-width:220px; height:1px;
+    background:linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+  }
+  .divider-mark{ width:6px; height:6px; background:var(--accent-gold); transform:rotate(45deg); border-radius:2px; flex:0 0 auto; }
+
+  /* ---------- About ---------- */
+  .about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; }
+  @media (max-width:820px){ .about-grid{ grid-template-columns:1fr; } }
+  .about-visual{
+    aspect-ratio:1/1; border-radius:var(--radius-lg); background:linear-gradient(150deg, var(--surface-2), var(--accent-gold-soft));
+    display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
+  }
+  .about-visual svg{ width:34%; height:34%; color:var(--accent); }
+  .about-text p{ color:var(--ink-soft); font-size:15.5px; margin-bottom:14px; }
+  .about-stats{ display:flex; gap:28px; margin-top:24px; flex-wrap:wrap; }
+  .about-stat b{ display:block; font-family:var(--font-display); font-size:30px; color:var(--accent); }
+  .about-stat span{ font-size:12.5px; color:var(--ink-soft); }
+
+  /* ---------- Services ---------- */
+  .service-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:20px; }
+  .service-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:26px 22px;
+    box-shadow:var(--shadow-sm); display:flex; flex-direction:column; gap:12px;
+  }
+  .service-icon{
+    width:52px; height:52px; border-radius:50%; background:var(--accent-soft); color:var(--accent);
+    display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+  }
+  .service-icon svg{ width:26px; height:26px; }
+  .service-card h3{ font-size:18px; }
+  .service-card p{ font-size:14px; color:var(--ink-soft); }
+  .service-meta{ margin-top:auto; padding-top:10px; font-size:12.5px; color:var(--accent); font-weight:600; }
+
+  /* ---------- Prices ---------- */
+  .country-toggle{ display:flex; gap:10px; justify-content:center; margin-bottom:30px; flex-wrap:wrap; }
+  .country-btn{
+    display:flex; align-items:center; gap:9px; padding:11px 22px; border-radius:999px; border:1px solid var(--line);
+    background:var(--surface); cursor:pointer; font-size:14px; font-weight:600; color:var(--ink-soft);
+  }
+  .country-btn .flag{ font-size:18px; }
+  .country-btn[aria-pressed="true"]{ background:var(--accent); color:var(--primary-ink); border-color:var(--accent); }
+  .price-table{ display:flex; flex-direction:column; gap:12px; max-width:760px; margin-inline:auto; }
+  .price-row{
+    display:flex; align-items:center; justify-content:space-between; gap:14px; background:var(--surface);
+    border:1px solid var(--line); border-radius:var(--radius-md); padding:18px 22px; flex-wrap:wrap;
+  }
+  .price-row h4{ font-size:15.5px; font-weight:600; margin-bottom:3px; }
+  .price-row .sub{ font-size:12.5px; color:var(--ink-soft); }
+  .price-value{ font-family:var(--font-display); font-size:19px; color:var(--accent); font-weight:600; white-space:nowrap; }
+  .price-value.pending{ font-family:var(--font-body); font-size:13.5px; color:var(--ink-soft); font-weight:600; font-style:italic; }
+  .price-promo{
+    margin-top:6px; text-align:center; font-size:13.5px; color:var(--accent-gold); font-weight:700;
+    background:var(--accent-gold-soft); border-radius:var(--radius-sm); padding:10px 16px; max-width:760px; margin-inline:auto;
+  }
+
+  /* ---------- Location ---------- */
+  .location-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:34px;
+    max-width:560px; margin:0 auto; text-align:center; box-shadow:var(--shadow-sm);
+  }
+  .location-card .flag-big{ font-size:38px; margin-bottom:10px; }
+  .location-card h3{ font-size:20px; margin-bottom:8px; }
+  .location-card p{ color:var(--ink-soft); font-size:14.5px; margin-bottom:18px; }
+
+  /* ---------- Process ---------- */
+  .process-list{ display:flex; flex-direction:column; gap:20px; max-width:820px; margin-inline:auto; }
+  .process-item{ display:flex; gap:18px; align-items:flex-start; }
+  .process-num{
+    flex:0 0 auto; width:38px; height:38px; border-radius:50%; background:var(--accent-soft); color:var(--accent);
+    display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:600; font-size:16px;
+  }
+  .process-item h4{ font-size:16.5px; margin-bottom:6px; }
+  .process-item p{ font-size:14.5px; color:var(--ink-soft); }
+
+  /* ---------- Tips ---------- */
+  .tips-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:18px; }
+  .tip-card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:22px; }
+  .tip-icon{ width:40px; height:40px; border-radius:50%; background:var(--accent-gold-soft); color:var(--accent-gold); display:flex; align-items:center; justify-content:center; margin-bottom:12px; }
+  .tip-icon svg{ width:20px; height:20px; }
+  .tip-card h4{ font-size:15px; margin-bottom:6px; }
+  .tip-card p{ font-size:13.5px; color:var(--ink-soft); }
+  .tips-note{
+    margin-top:26px; padding:16px 20px; border-radius:var(--radius-md); background:var(--accent-soft);
+    border:1px solid var(--accent); font-size:13.5px; color:var(--ink); display:flex; gap:10px; max-width:820px; margin-inline:auto;
+  }
+  .tips-note svg{ width:20px; height:20px; flex:0 0 auto; color:var(--accent); margin-top:1px; }
+
+  /* ---------- Reviews (empty state) ---------- */
+  .empty-state-block{
+    text-align:center; padding:44px 24px; background:var(--surface); border:1px dashed var(--line);
+    border-radius:var(--radius-lg); color:var(--ink-soft); max-width:560px; margin-inline:auto;
+  }
+  .empty-state-block svg{ width:32px; height:32px; color:var(--accent-gold); margin-bottom:14px; }
+  .empty-state-block p{ font-size:14.5px; }
+
+  /* ---------- Booking ---------- */
+  .book-section{ background:var(--surface-2); }
+  .book-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:32px;
+    max-width:560px; margin-inline:auto; box-shadow:var(--shadow-sm);
+  }
+  .form-field{ margin-bottom:16px; }
+  .form-field label{ display:block; font-size:13px; font-weight:600; margin-bottom:6px; }
+  .form-field input, .form-field select, .form-field textarea{
+    width:100%; padding:12px 14px; border-radius:var(--radius-sm); border:1px solid var(--line); background:var(--bg);
+    font-family:inherit; font-size:14.5px; color:var(--ink); resize:vertical;
+  }
+  .form-field input:focus, .form-field select:focus{ border-color:var(--accent); }
+  .radio-row{ display:flex; gap:10px; }
+  .radio-pill{ flex:1; }
+  .radio-pill input{ display:none; }
+  .radio-pill span{
+    display:block; text-align:center; padding:10px 12px; border-radius:999px; border:1px solid var(--line);
+    background:var(--bg); font-size:13.5px; cursor:pointer; font-weight:600; color:var(--ink-soft);
+  }
+  .radio-pill input:checked + span{ background:var(--accent); color:var(--primary-ink); border-color:var(--accent); }
+  .form-note{ font-size:12px; color:var(--ink-soft); margin-top:6px; }
+  .whatsapp-missing{
+    text-align:center; padding:16px; border-radius:var(--radius-md); background:var(--accent-gold-soft);
+    color:var(--ink); font-size:13.5px;
+  }
+
+  footer.site-footer{ padding:34px 0; text-align:center; }
+  footer.site-footer p{ font-size:12.5px; color:var(--ink-soft); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition-duration:.001ms !important; animation-duration:.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <g id="i-leaf"><path d="M5 20c0-8 6-14 14-14 0 8-6 14-14 14z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c3-3 6-6 14-14" fill="none" stroke="currentColor" stroke-width="1.6"/></g>
+    <g id="i-bolt"><path d="M13 2 4 14h6l-1 8 9-12h-6z" fill="currentColor"/></g>
+    <g id="i-heart"><path d="M12 20s-7.5-4.9-9.7-9.4C.7 6.9 3 3.5 6.4 3.5c2 0 3.6 1.1 4.6 2.7 1-1.6 2.6-2.7 4.6-2.7 3.4 0 5.7 3.4 4.1 7.1C19.5 15.1 12 20 12 20z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></g>
+    <g id="i-sparkle"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z" fill="currentColor"/></g>
+    <g id="i-droplet"><path d="M12 2s7 8.3 7 13a7 7 0 1 1-14 0c0-4.7 7-13 7-13z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></g>
+    <g id="i-glow"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="M4.9 4.9l2.1 2.1"/><path d="M17 17l2.1 2.1"/><path d="M19.1 4.9 17 7"/><path d="M7 17l-2.1 2.1"/></g></g>
+    <g id="i-shield"><path d="M12 3l7 3v6c0 4.8-3 8.4-7 9-4-.6-7-4.2-7-9V6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="i-calendar"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></g>
+    <g id="i-pin"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/></g>
+    <g id="i-chat"><path d="M4 20l1.3-4A8 8 0 1 1 9 19.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></g>
+    <g id="i-clock"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></g>
+    <g id="i-sun"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 2.5v3"/><path d="M12 18.5v3"/><path d="M4.2 4.2l2 2"/><path d="M17.8 17.8l2 2"/><path d="M2.5 12h3"/><path d="M18.5 12h3"/><path d="M4.2 19.8l2-2"/><path d="M17.8 6.2l2-2"/></g></g>
+  </defs>
+</svg>
+
+<header class="site-header">
+  <div class="container header-row">
+    <a class="brand" href="#top">
+      <svg><use href="#i-sparkle"/></svg>
+      <span class="brand-name">Body Sculptor</span>
+    </a>
+    <nav class="main-nav">
+      <a href="#about" data-i18n="navAbout"></a>
+      <a href="#services" data-i18n="navServices"></a>
+      <a href="#prices" data-i18n="navPrices"></a>
+      <a href="#location" data-i18n="navLocation"></a>
+      <a href="#process" data-i18n="navProcess"></a>
+      <a href="#tips" data-i18n="navTips"></a>
+      <a href="#reviews" data-i18n="navReviews"></a>
+    </nav>
+    <div class="header-actions">
+      <div class="lang-switch" id="langSwitch">
+        <button data-lang="en" aria-pressed="false">EN</button>
+        <button data-lang="ru" aria-pressed="true">RU</button>
+      </div>
+      <a href="#book" class="btn btn-primary" data-i18n="navBook" style="padding:10px 18px; font-size:13.5px;"></a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-ring r1" aria-hidden="true"></div>
+    <div class="hero-ring r2" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <span class="hero-badge"><svg><use href="#i-shield"/></svg><span data-i18n="heroBadge"></span></span>
+      <span class="eyebrow" data-i18n="heroEyebrow"></span>
+      <h1 data-i18n="heroTitle"></h1>
+      <p class="hero-lead" data-i18n="heroLead"></p>
+      <div class="hero-actions">
+        <a href="#book" class="btn btn-primary" data-i18n="heroCta"></a>
+        <a href="#services" class="btn btn-ghost" data-i18n="heroCta2"></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-mark"></span></div>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about">
+    <div class="container about-grid">
+      <div class="about-visual"><svg><use href="#i-sparkle"/></svg></div>
+      <div class="about-text">
+        <span class="eyebrow" data-i18n="aboutEyebrow"></span>
+        <h2 style="margin-top:8px; font-size:clamp(24px,3vw,32px);" data-i18n="aboutTitle"></h2>
+        <p style="margin-top:16px;" data-i18n="aboutP1"></p>
+        <p data-i18n="aboutP2"></p>
+        <div class="about-stats">
+          <div class="about-stat"><b>9+</b><span data-i18n="aboutStat1"></span></div>
+          <div class="about-stat"><b>2</b><span data-i18n="aboutStat2"></span></div>
+          <div class="about-stat"><b>✓</b><span data-i18n="aboutStat3"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-mark"></span></div>
+
+  <!-- ============ SERVICES ============ -->
+  <section id="services">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow" data-i18n="servicesEyebrow"></span>
+        <h2 data-i18n="servicesTitle"></h2>
+        <p data-i18n="servicesLead"></p>
+      </div>
+      <div class="service-grid" id="serviceGrid"></div>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-mark"></span></div>
+
+  <!-- ============ PRICES ============ -->
+  <section id="prices">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow" data-i18n="pricesEyebrow"></span>
+        <h2 data-i18n="pricesTitle"></h2>
+        <p data-i18n="pricesLead"></p>
+      </div>
+      <div class="country-toggle" id="priceCountryToggle">
+        <button class="country-btn" data-country="ru" aria-pressed="true"><span class="flag">🇷🇺</span><span data-i18n="countryRuShort"></span></button>
+        <button class="country-btn" data-country="eg" aria-pressed="false"><span class="flag">🇪🇬</span><span data-i18n="countryEgShort"></span></button>
+      </div>
+      <div class="price-table" id="priceTable"></div>
+      <p class="price-promo" data-i18n="pricePromo"></p>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-mark"></span></div>
+
+  <!-- ============ LOCATION ============ -->
+  <section id="location">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow" data-i18n="locationEyebrow"></span>
+        <h2 data-i18n="locationTitle"></h2>
+        <p data-i18n="locationLead"></p>
+      </div>
+      <div class="country-toggle" id="locCountryToggle">
+        <button class="country-btn" data-country="ru" aria-pressed="true"><span class="flag">🇷🇺</span><span data-i18n="countryRuShort"></span></button>
+        <button class="country-btn" data-country="eg" aria-pressed="false"><span class="flag">🇪🇬</span><span data-i18n="countryEgShort"></span></button>
+      </div>
+      <div class="location-card" id="locationCard"></div>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-mark"></span></div>
+
+  <!-- ============ PROCESS ============ -->
+  <section id="process">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow" data-i18n="processEyebrow"></span>
+        <h2 data-i18n="processTitle"></h2>
+        <p data-i18n="processLead"></p>
+      </div>
+      <div class="process-list" id="processList"></div>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-mark"></span></div>
+
+  <!-- ============ TIPS ============ -->
+  <section id="tips">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow" data-i18n="tipsEyebrow"></span>
+        <h2 data-i18n="tipsTitle"></h2>
+        <p data-i18n="tipsLead"></p>
+      </div>
+      <div class="tips-grid" id="tipsGrid"></div>
+      <div class="tips-note">
+        <svg><use href="#i-calendar"/></svg>
+        <span data-i18n="tipsLaserNote"></span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-mark"></span></div>
+
+  <!-- ============ REVIEWS ============ -->
+  <section id="reviews">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow" data-i18n="reviewsEyebrow"></span>
+        <h2 data-i18n="reviewsTitle"></h2>
+      </div>
+      <div class="empty-state-block">
+        <svg><use href="#i-sparkle"/></svg>
+        <p data-i18n="reviewsEmpty"></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-mark"></span></div>
+
+  <!-- ============ BOOK ============ -->
+  <section id="book" class="book-section">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow" data-i18n="bookEyebrow"></span>
+        <h2 data-i18n="bookTitle"></h2>
+        <p data-i18n="bookLead"></p>
+      </div>
+      <div class="book-card">
+        <div class="form-field">
+          <label data-i18n="formCountryLabel"></label>
+          <div class="radio-row">
+            <label class="radio-pill"><input type="radio" name="bookCountry" value="ru" checked><span>🇷🇺 <span data-i18n="countryRuShort"></span></span></label>
+            <label class="radio-pill"><input type="radio" name="bookCountry" value="eg"><span>🇪🇬 <span data-i18n="countryEgShort"></span></span></label>
+          </div>
+        </div>
+        <div class="form-field">
+          <label data-i18n="formServiceLabel"></label>
+          <select id="bookService"></select>
+        </div>
+        <div class="form-field">
+          <label data-i18n="formNameLabel"></label>
+          <input type="text" id="bookName">
+        </div>
+        <div class="form-field">
+          <label data-i18n="formPhoneLabel"></label>
+          <input type="text" id="bookPhone">
+        </div>
+        <div class="form-field">
+          <label data-i18n="formNoteLabel"></label>
+          <textarea id="bookNote" rows="3"></textarea>
+        </div>
+        <button class="btn btn-primary btn-block" id="bookSubmit" data-i18n="formSubmit"></button>
+        <p class="form-note" id="bookHint" data-i18n="formHint"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>© <span id="year"></span> Body Sculptor</p>
+    <p data-i18n="footerNote"></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =====================================================
+     CONFIG — fill in the real details as they're confirmed
+     ===================================================== */
+  var WHATSAPP = ""; // e.g. "201234567890" — booking is disabled until this is set
+
+  var STRINGS = {
+    en: {
+      navAbout:"About", navServices:"Services", navPrices:"Prices", navLocation:"Location",
+      navProcess:"How it works", navTips:"Tips", navReviews:"Reviews", navBook:"Book now",
+      heroBadge:"Certified master · 9+ years",
+      heroEyebrow:"Body Sculptor",
+      heroTitle:"Sculpting confident, comfortable bodies",
+      heroLead:"Laser hair removal, anti-cellulite massage and facial care from a certified master, working in Russia and Egypt — with an honest, results-first approach.",
+      heroCta:"Book a session", heroCta2:"See services",
+      aboutEyebrow:"About me", aboutTitle:"Not self-taught — certified, and 9 years in",
+      aboutP1:"I've been a certified massage therapist for nearly 10 years. Anti-cellulite massage was my very first specialty, and it's still my favourite — it opened the door to everything that came after.",
+      aboutP2:"Three years in, I invested in my own laser machine, and since then I keep training with leading specialists and upgrading the equipment. Helping people feel good in their bodies is simply what I love doing.",
+      aboutStat1:"years in massage", aboutStat2:"countries — Russia & Egypt", aboutStat3:"certified specialist",
+      servicesEyebrow:"What I do", servicesTitle:"Services", servicesLead:"Every treatment is chosen and dosed individually — not by the clock, but by what your skin actually needs.",
+      svcLaserName:"Laser hair removal", svcLaserDesc:"Soprano Titanium — a hybrid diode laser with 3 wavelengths, safe for all skin types.", svcLaserMeta:"Course: 10–12 sessions, every 21–30 days",
+      svcMassageName:"Anti-cellulite massage", svcMassageDesc:"My original specialty — a hands-on technique built over almost a decade of practice.", svcMassageMeta:"Price on request",
+      svcFacialName:"Hollywood facial cleaning", svcFacialDesc:"A 6-step deep facial: mechanical + ultrasonic cleaning, HydraFacial, oxygen infusion, custom mask, LED therapy.", svcFacialMeta:"Duration ≈ 2 hours",
+      svcBiorevitName:"Biorevitalization", svcBiorevitDesc:"SKINTEX PROLIFT — high-molecular hyaluronic acid + DMAE for an instant lifting effect.", svcBiorevitMeta:"Course: 3–4 sessions, 7–10 days apart",
+      svcLiquidName:"Liquid laser", svcLiquidDesc:"A gentler, light-based skin treatment — a nice add-on alongside facial care.", svcLiquidMeta:"Price to be confirmed",
+      pricesEyebrow:"Investment", pricesTitle:"Prices", pricesLead:"Prices shown for the selected country. Anything marked \"price on request\" will be confirmed directly.",
+      countryRuShort:"Russia", countryEgShort:"Egypt",
+      priceFullBody:"Full body — no exceptions", priceFullBodyNote:"Face, underarms, arms, areolas, stomach, legs, back, deep bikini",
+      priceComplex:"Complex", priceComplexNote:"Arms, legs, underarms, deep bikini",
+      priceCombo:"Combo", priceComboNote:"Underarms + deep bikini",
+      priceFacial:"Hollywood facial cleaning", priceMassage:"Anti-cellulite massage (per session)",
+      priceBiorevit:"Biorevitalization (course of 3–4)", priceLiquid:"Liquid laser",
+      pricePending:"price on request",
+      pricePromo:"🎁 Book a full laser course and the 12th session is free.",
+      locationEyebrow:"Where to find me", locationTitle:"Working in two countries", locationLead:"Choose a country to see details for that location — booking goes through the same WhatsApp either way.",
+      locationRuTitle:"Russia", locationRuText:"City to be confirmed — message on WhatsApp and I'll share the exact address for your session.",
+      locationEgTitle:"Egypt", locationEgText:"City to be confirmed — message on WhatsApp and I'll share the exact address for your session.",
+      locationCta:"Message on WhatsApp",
+      processEyebrow:"Behind the treatment", processTitle:"How the laser treatment actually works", processLead:"A few honest things worth knowing before your first session.",
+      process1Title:"Duration isn't quality", process1Text:"A long session doesn't mean a better result. What actually matters is the right power and parameters — and visible erythema, the sign the laser reached the follicle correctly.",
+      process2Title:"A hybrid laser, not pure alexandrite", process2Text:"Soprano Titanium combines three wavelengths — 755nm, 810nm and 1064nm — working gradually and gently rather than a single sharp pulse, safely on every skin type.",
+      process3Title:"Regularity is what gives lasting results", process3Text:"The best course: every 21–30 days, 10–12 sessions on average, then a maintenance session once every 6–12 months. Stopping after 1–2 sessions loses the progress you've made.",
+      process4Title:"No plastic wrap on the handpiece", process4Text:"It looks hygienic but isn't — it loses over 13% of the laser's energy, can cause uneven contact and burns, and doesn't actually protect against viruses or bacteria. I use imported, purpose-made disinfectant instead.",
+      process5Title:"Modesty, respected", process5Text:"In line with Islamic modesty principles, the intimate area is never treated by the master directly — I guide you step by step, and you perform that part yourself.",
+      tipsEyebrow:"Aftercare", tipsTitle:"Useful tips", tipsLead:"What to do (and avoid) in the days after your facial treatment.",
+      tip1Title:"First 24–48 hours", tip1Text:"Skin is vulnerable right after cleansing — avoid touching your face, skip makeup or keep it minimal, and stay away from saunas, gyms and scrubs.",
+      tip2Title:"Cleanse gently", tip2Text:"A mild gel or foam, twice a day. Skip alcohol and harsh surfactants — over-drying only increases oil production.",
+      tip3Title:"Hydration is non-negotiable", tip3Text:"Even oily skin needs it. A light hyaluronic-acid cream or gel helps restore the skin barrier.",
+      tip4Title:"Reintroduce actives slowly", tip4Text:"From day 2–3: salicylic acid (BHA) to clear pores, niacinamide to balance oil, and clay masks once or twice a week.",
+      tip5Title:"SPF, every single day", tip5Text:"Sun exposure worsens inflammation and can trigger pigmentation after a facial — a light, non-comedogenic sunscreen is essential.",
+      tip6Title:"Keep everything that touches your face clean", tip6Text:"Change pillowcases every 2–3 days, wipe your phone regularly, and wash makeup brushes weekly.",
+      tip7Title:"Don't overdo it", tip7Text:"A common mistake is piling on too many active ingredients — it leads to irritation, and often more breakouts, not fewer.",
+      tipsLaserNote:"For laser hair removal: every 21–30 days, 10–12 sessions, then a maintenance session every 6–12 months.",
+      reviewsEyebrow:"Client stories", reviewsTitle:"Reviews",
+      reviewsEmpty:"Real client reviews are on their way — this section will be updated with genuine feedback soon.",
+      bookEyebrow:"Get in touch", bookTitle:"Book a session", bookLead:"Fill in a few details and a ready message opens in WhatsApp — nothing is sent automatically.",
+      formCountryLabel:"Country", formServiceLabel:"Service", formNameLabel:"Your name", formPhoneLabel:"Phone / WhatsApp",
+      formNoteLabel:"Anything else? (optional)", formSubmit:"Continue in WhatsApp",
+      formHint:"Opens WhatsApp with your message ready to send.",
+      whatsappMissing:"Booking isn't connected yet — WhatsApp number is being set up.",
+      footerNote:"Laser hair removal · Massage · Facial care — Russia & Egypt"
+    },
+    ru: {
+      navAbout:"Кто я", navServices:"Услуги", navPrices:"Цены", navLocation:"Локация",
+      navProcess:"Как проходит", navTips:"Советы", navReviews:"Отзывы", navBook:"Записаться",
+      heroBadge:"Сертифицированный мастер · 9+ лет",
+      heroEyebrow:"Body Sculptor",
+      heroTitle:"Красивое тело и уверенность в себе",
+      heroLead:"Лазерная эпиляция, антицеллюлитный массаж и уход за лицом от сертифицированного мастера — работаю в России и Египте, честно и по результату, а не по времени.",
+      heroCta:"Записаться", heroCta2:"Смотреть услуги",
+      aboutEyebrow:"Обо мне", aboutTitle:"Не самоучка — сертифицированный мастер, уже 9 лет в деле",
+      aboutP1:"Я сертифицированный мастер массажа, в этой сфере почти 10 лет. Антицеллюлитный массаж был моей самой первой специализацией — и остаётся любимой до сих пор, именно он открыл мне путь ко всему остальному.",
+      aboutP2:"Спустя 3 года я купила собственный лазерный аппарат, и с тех пор регулярно прохожу обучение у лучших специалистов и обновляю оборудование. Делать красивые фигуры — моё призвание и работа, которую я люблю.",
+      aboutStat1:"лет в массаже", aboutStat2:"страны — Россия и Египет", aboutStat3:"сертифицированный мастер",
+      servicesEyebrow:"Чем занимаюсь", servicesTitle:"Услуги", servicesLead:"Каждая процедура подбирается индивидуально — не по времени, а по тому, что реально нужно коже.",
+      svcLaserName:"Лазерная эпиляция", svcLaserDesc:"Soprano Titanium — гибридный диодный лазер с тремя длинами волны, безопасен для всех типов кожи.", svcLaserMeta:"Курс: 10–12 процедур каждые 21–30 дней",
+      svcMassageName:"Антицеллюлитный массаж", svcMassageDesc:"Моя первая и любимая специализация — техника, отточенная почти за 10 лет практики.", svcMassageMeta:"Цена уточняется",
+      svcFacialName:"Голливудская чистка лица", svcFacialDesc:"6-этапная глубокая чистка: механическая + ультразвуковая чистка, вакуумный гидропилинг, кислородная кисть, маска по типу кожи, LED-терапия.", svcFacialMeta:"Длительность ≈ 2 часа",
+      svcBiorevitName:"Биоревитализация", svcBiorevitDesc:"SKINTEX PROLIFT — высокомолекулярная гиалуроновая кислота + ДМАЭ, мгновенный лифтинг-эффект.", svcBiorevitMeta:"Курс: 3–4 процедуры с интервалом 7–10 дней",
+      svcLiquidName:"Жидкий лазер", svcLiquidDesc:"Более мягкая световая процедура для кожи — приятное дополнение к уходу за лицом.", svcLiquidMeta:"Цена уточняется",
+      pricesEyebrow:"Инвестиция в себя", pricesTitle:"Цены", pricesLead:"Цены показаны для выбранной страны. Всё с пометкой «цена уточняется» — подтверждается лично.",
+      countryRuShort:"Россия", countryEgShort:"Египет",
+      priceFullBody:"Всё тело без исключений", priceFullBodyNote:"Лицо, подмышки, руки, ареолы, живот, ноги, спина, глубокое бикини",
+      priceComplex:"Комплекс", priceComplexNote:"Руки, ноги, подмышки, глубокое бикини",
+      priceCombo:"Комбо", priceComboNote:"Подмышки + глубокое бикини",
+      priceFacial:"Голливудская чистка лица", priceMassage:"Антицеллюлитный массаж (1 сеанс)",
+      priceBiorevit:"Биоревитализация (курс 3–4)", priceLiquid:"Жидкий лазер",
+      pricePending:"цена уточняется",
+      pricePromo:"🎁 При прохождении полного курса лазера — 12-я процедура в подарок!",
+      locationEyebrow:"Где меня найти", locationTitle:"Работаю в двух странах", locationLead:"Выбери страну — под ней появится информация именно про неё, запись всё равно идёт в один WhatsApp.",
+      locationRuTitle:"Россия", locationRuText:"Город уточняется — напиши в WhatsApp, пришлю точный адрес на удобное для тебя время.",
+      locationEgTitle:"Египет", locationEgText:"Город уточняется — напиши в WhatsApp, пришлю точный адрес на удобное для тебя время.",
+      locationCta:"Написать в WhatsApp",
+      processEyebrow:"Что за этим стоит", processTitle:"Как на самом деле работает лазер", processLead:"Несколько честных моментов, которые стоит знать перед первой процедурой.",
+      process1Title:"Долго — не значит качественно", process1Text:"Длительность процедуры не равна результату. Важны правильные параметры и мощность — и видимая эритема, признак того, что лазер сработал на фолликул как надо.",
+      process2Title:"Гибридный лазер, а не чистый александрит", process2Text:"Soprano Titanium объединяет три длины волны — 755, 810 и 1064 нм — работает постепенно и бережно, а не одним резким импульсом, безопасно для любого типа кожи.",
+      process3Title:"Именно регулярность даёт стойкий результат", process3Text:"Оптимальный курс: каждые 21–30 дней, в среднем 10–12 процедур, дальше — поддерживающая процедура раз в 6–12 месяцев. Пропуск после 1–2 процедур сводит прогресс на нет.",
+      process4Title:"Без плёнки на манипуле", process4Text:"Выглядит гигиенично, но на деле — нет: теряется больше 13% энергии лазера, возможны неровный контакт и ожоги, а от вирусов и бактерий плёнка не защищает. Использую специальные привозные средства дезинфекции.",
+      process5Title:"С уважением к скромности", process5Text:"В соответствии с исламскими принципами, зону бикини мастер не обрабатывает лично — я подробно объясняю технику, а эту часть клиентка выполняет сама.",
+      tipsEyebrow:"Уход после процедуры", tipsTitle:"Полезные советы", tipsLead:"Что делать (и чего избегать) в первые дни после чистки лица.",
+      tip1Title:"Первые 24–48 часов", tip1Text:"Кожа после чистки уязвима — не трогай лицо руками, избегай макияжа или используй по минимуму, не ходи в баню, сауну и спортзал, не используй скрабы.",
+      tip2Title:"Мягкое очищение", tip2Text:"Щадящие гели/пенки 2 раза в день. Без спирта и жёстких ПАВ — пересушивание только усилит выработку себума.",
+      tip3Title:"Увлажнение обязательно", tip3Text:"Даже для жирной кожи. Лёгкий крем или гель с гиалуроновой кислотой поможет восстановить барьер кожи.",
+      tip4Title:"Активы — постепенно", tip4Text:"Через 2–3 дня можно вводить салициловую кислоту (BHA) для пор, ниацинамид для регуляции жирности и глиняные маски 1–2 раза в неделю.",
+      tip5Title:"SPF каждый день", tip5Text:"Солнце усиливает воспаления и может вызвать пигментацию после чистки — лёгкий некомедогенный SPF обязателен.",
+      tip6Title:"Чистота того, что касается лица", tip6Text:"Меняй наволочку каждые 2–3 дня, регулярно протирай телефон, кисти для макияжа мой минимум раз в неделю.",
+      tip7Title:"Не перебарщивай", tip7Text:"Частая ошибка — слишком много активных средств сразу: это раздражение и ещё больше высыпаний, а не меньше.",
+      tipsLaserNote:"Для лазерной эпиляции: каждые 21–30 дней, курс 10–12 процедур, дальше поддерживающая процедура раз в 6–12 месяцев.",
+      reviewsEyebrow:"Истории клиентов", reviewsTitle:"Отзывы",
+      reviewsEmpty:"Реальные отзывы клиентов уже в пути — этот раздел скоро обновится настоящими историями.",
+      bookEyebrow:"Связаться", bookTitle:"Записаться на процедуру", bookLead:"Заполни несколько полей — откроется готовое сообщение в WhatsApp, ничего не отправляется автоматически.",
+      formCountryLabel:"Страна", formServiceLabel:"Услуга", formNameLabel:"Имя", formPhoneLabel:"Телефон / WhatsApp",
+      formNoteLabel:"Дополнительно (необязательно)", formSubmit:"Продолжить в WhatsApp",
+      formHint:"Откроется WhatsApp с уже готовым сообщением.",
+      whatsappMissing:"Запись пока не подключена — номер WhatsApp настраивается.",
+      footerNote:"Лазерная эпиляция · Массаж · Уход за лицом — Россия и Египет"
+    }
+  };
+
+  var SERVICES = [
+    { id:"laser", icon:"i-bolt", nameKey:"svcLaserName", descKey:"svcLaserDesc", metaKey:"svcLaserMeta" },
+    { id:"massage", icon:"i-heart", nameKey:"svcMassageName", descKey:"svcMassageDesc", metaKey:"svcMassageMeta" },
+    { id:"facial", icon:"i-sparkle", nameKey:"svcFacialName", descKey:"svcFacialDesc", metaKey:"svcFacialMeta" },
+    { id:"biorevit", icon:"i-droplet", nameKey:"svcBiorevitName", descKey:"svcBiorevitDesc", metaKey:"svcBiorevitMeta" },
+    { id:"liquid", icon:"i-glow", nameKey:"svcLiquidName", descKey:"svcLiquidDesc", metaKey:"svcLiquidMeta" }
+  ];
+
+  // Real prices we have so far are Russia-only (in RUB); Egypt pricing
+  // and a few RU items are still pending — shown honestly as "price on
+  // request" rather than guessed at.
+  var PRICES = {
+    ru: [
+      { nameKey:"priceFullBody", noteKey:"priceFullBodyNote", value:"4000 ₽" },
+      { nameKey:"priceComplex", noteKey:"priceComplexNote", value:"3500 ₽" },
+      { nameKey:"priceCombo", noteKey:"priceComboNote", value:"2200 ₽" },
+      { nameKey:"priceFacial", value:null },
+      { nameKey:"priceMassage", value:null },
+      { nameKey:"priceBiorevit", value:null },
+      { nameKey:"priceLiquid", value:null }
+    ],
+    eg: [
+      { nameKey:"priceFullBody", noteKey:"priceFullBodyNote", value:null },
+      { nameKey:"priceComplex", noteKey:"priceComplexNote", value:null },
+      { nameKey:"priceCombo", noteKey:"priceComboNote", value:null },
+      { nameKey:"priceFacial", value:null },
+      { nameKey:"priceMassage", value:null },
+      { nameKey:"priceBiorevit", value:null },
+      { nameKey:"priceLiquid", value:null }
+    ]
+  };
+
+  var PROCESS_STEPS = ["process1","process2","process3","process4","process5"];
+  var TIPS = ["tip1","tip2","tip3","tip4","tip5","tip6","tip7"];
+
+  var state = { lang:"ru", priceCountry:"ru", locCountry:"ru" };
+  try{
+    var savedLang = localStorage.getItem("bs_lang");
+    if(savedLang === "en" || savedLang === "ru") state.lang = savedLang;
+  }catch(e){}
+
+  function t(key){
+    var dict = STRINGS[state.lang] || STRINGS.ru;
+    return dict[key] !== undefined ? dict[key] : (STRINGS.ru[key] || "");
+  }
+
+  var ICON_VIEWBOX = {
+    "i-leaf":"0 0 24 24","i-bolt":"0 0 24 24","i-heart":"0 0 24 24","i-sparkle":"0 0 24 24",
+    "i-droplet":"0 0 24 24","i-glow":"0 0 24 24","i-shield":"0 0 24 24","i-calendar":"0 0 24 24",
+    "i-pin":"0 0 24 24","i-chat":"0 0 24 24","i-clock":"0 0 24 24","i-sun":"0 0 24 24"
+  };
+  function hydrateIcons(root){
+    if(!root) return;
+    root.querySelectorAll("svg").forEach(function(svg){
+      var use = svg.querySelector("use");
+      if(!use) return;
+      var id = use.getAttribute("href").replace("#","");
+      if(ICON_VIEWBOX[id] && !svg.getAttribute("viewBox")) svg.setAttribute("viewBox", ICON_VIEWBOX[id]);
+    });
+  }
+
+  function applyLanguage(){
+    document.documentElement.lang = state.lang;
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      el.textContent = t(el.getAttribute("data-i18n"));
+    });
+    document.querySelectorAll("#langSwitch button").forEach(function(btn){
+      btn.setAttribute("aria-pressed", btn.getAttribute("data-lang") === state.lang ? "true" : "false");
+    });
+    try{ localStorage.setItem("bs_lang", state.lang); }catch(e){}
+  }
+
+  function renderServices(){
+    var html = "";
+    SERVICES.forEach(function(s){
+      html += '<div class="service-card">' +
+        '<div class="service-icon"><svg><use href="#'+s.icon+'"/></svg></div>' +
+        '<h3>'+t(s.nameKey)+'</h3>' +
+        '<p>'+t(s.descKey)+'</p>' +
+        '<div class="service-meta">'+t(s.metaKey)+'</div>' +
+        '</div>';
+    });
+    var wrap = document.getElementById("serviceGrid");
+    wrap.innerHTML = html;
+    hydrateIcons(wrap);
+  }
+
+  function renderPrices(){
+    var rows = PRICES[state.priceCountry] || [];
+    var html = "";
+    rows.forEach(function(r){
+      html += '<div class="price-row">' +
+        '<div><h4>'+t(r.nameKey)+'</h4>' + (r.noteKey ? '<div class="sub">'+t(r.noteKey)+'</div>' : '') + '</div>' +
+        '<div class="price-value'+(r.value ? '' : ' pending')+'">'+(r.value || t("pricePending"))+'</div>' +
+        '</div>';
+    });
+    document.getElementById("priceTable").innerHTML = html;
+    document.querySelectorAll('#priceCountryToggle .country-btn').forEach(function(btn){
+      btn.setAttribute("aria-pressed", btn.getAttribute("data-country") === state.priceCountry ? "true" : "false");
+    });
+  }
+
+  function renderLocation(){
+    var isRu = state.locCountry === "ru";
+    var titleKey = isRu ? "locationRuTitle" : "locationEgTitle";
+    var textKey = isRu ? "locationRuText" : "locationEgText";
+    var flag = isRu ? "🇷🇺" : "🇪🇬";
+    var html =
+      '<div class="flag-big">'+flag+'</div>' +
+      '<h3>'+t(titleKey)+'</h3>' +
+      '<p>'+t(textKey)+'</p>' +
+      '<a href="#book" class="btn btn-primary"><svg style="width:18px;height:18px;"><use href="#i-chat"/></svg>'+t("locationCta")+'</a>';
+    var wrap = document.getElementById("locationCard");
+    wrap.innerHTML = html;
+    hydrateIcons(wrap);
+    document.querySelectorAll('#locCountryToggle .country-btn').forEach(function(btn){
+      btn.setAttribute("aria-pressed", btn.getAttribute("data-country") === state.locCountry ? "true" : "false");
+    });
+  }
+
+  function renderProcess(){
+    var html = "";
+    PROCESS_STEPS.forEach(function(key, i){
+      html += '<div class="process-item">' +
+        '<div class="process-num">'+(i+1)+'</div>' +
+        '<div><h4>'+t(key+"Title")+'</h4><p>'+t(key+"Text")+'</p></div>' +
+        '</div>';
+    });
+    document.getElementById("processList").innerHTML = html;
+  }
+
+  var TIP_ICONS = { tip1:"i-clock", tip2:"i-droplet", tip3:"i-droplet", tip4:"i-sparkle", tip5:"i-sun", tip6:"i-shield", tip7:"i-heart" };
+  function renderTips(){
+    var html = "";
+    TIPS.forEach(function(key){
+      html += '<div class="tip-card">' +
+        '<div class="tip-icon"><svg><use href="#'+TIP_ICONS[key]+'"/></svg></div>' +
+        '<h4>'+t(key+"Title")+'</h4><p>'+t(key+"Text")+'</p>' +
+        '</div>';
+    });
+    var wrap = document.getElementById("tipsGrid");
+    wrap.innerHTML = html;
+    hydrateIcons(wrap);
+  }
+
+  function renderBookForm(){
+    var select = document.getElementById("bookService");
+    select.innerHTML = SERVICES.map(function(s){ return '<option value="'+s.id+'">'+t(s.nameKey)+'</option>'; }).join("");
+  }
+
+  function buildWhatsappMessage(){
+    var country = document.querySelector('input[name="bookCountry"]:checked').value;
+    var serviceEl = document.getElementById("bookService");
+    var serviceName = serviceEl.options[serviceEl.selectedIndex].textContent;
+    var name = document.getElementById("bookName").value.trim();
+    var phone = document.getElementById("bookPhone").value.trim();
+    var note = document.getElementById("bookNote").value.trim();
+    var countryLabel = country === "ru" ? t("countryRuShort") : t("countryEgShort");
+    var lines = [
+      "Body Sculptor — " + t("bookTitle"),
+      t("formCountryLabel") + ": " + countryLabel,
+      t("formServiceLabel") + ": " + serviceName
+    ];
+    if(name) lines.push(t("formNameLabel") + ": " + name);
+    if(phone) lines.push(t("formPhoneLabel") + ": " + phone);
+    if(note) lines.push(t("formNoteLabel") + ": " + note);
+    return lines.join("\n");
+  }
+
+  function initBooking(){
+    var hint = document.getElementById("bookHint");
+    var btn = document.getElementById("bookSubmit");
+    if(!WHATSAPP){
+      hint.textContent = t("whatsappMissing");
+      btn.addEventListener("click", function(){ alert(t("whatsappMissing")); });
+      return;
+    }
+    btn.addEventListener("click", function(){
+      var msg = buildWhatsappMessage();
+      window.open("https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg), "_blank");
+    });
+  }
+
+  function renderAll(){
+    applyLanguage();
+    renderServices();
+    renderPrices();
+    renderLocation();
+    renderProcess();
+    renderTips();
+    renderBookForm();
+  }
+
+  document.getElementById("langSwitch").addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-lang]");
+    if(!btn) return;
+    state.lang = btn.getAttribute("data-lang");
+    renderAll();
+  });
+  document.getElementById("priceCountryToggle").addEventListener("click", function(e){
+    var btn = e.target.closest(".country-btn");
+    if(!btn) return;
+    state.priceCountry = btn.getAttribute("data-country");
+    renderPrices();
+  });
+  document.getElementById("locCountryToggle").addEventListener("click", function(e){
+    var btn = e.target.closest(".country-btn");
+    if(!btn) return;
+    state.locCountry = btn.getAttribute("data-country");
+    renderLocation();
+  });
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+  hydrateIcons(document);
+  renderAll();
+  initBooking();
+})();
+</script>
+</body>
+</html>
